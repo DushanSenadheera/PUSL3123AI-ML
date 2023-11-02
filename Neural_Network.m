@@ -1,26 +1,65 @@
 %load the fisheriris.mat dataset
-load fisheriris.mat
+load fisheriris
 
-%Shuffle the dataset randomly 
-rng(0); % For reproducibility
-idx = randperm(size(meas,1));
-meas = meas(idx,:);
-species = species(idx);
+%shuffle the dataset
+rng(1); % For reproducibility
 
-%Shuffle the dataset randomly by selecting 60% for training and remaining 40% for testing
-train_data = meas(1:90,:);
-train_label = species(1:90,:);
-test_data = meas(91:150,:);
-test_label = species(91:150,:);
+%select 60% of the dataset for training
+idx = randperm(size(meas,1),round(size(meas,1)*0.6));
 
-% create training data, training target, testing data and testing target
-train_data = train_data';
-train_label = train_label';
-test_data = test_data';
-test_label = test_label';
+%select the remaining 40% of the dataset for testing
+idx_test = setdiff(1:size(meas,1),idx);
 
-%select feedforwardnet 
-net = feedforwardnet(10);
+%training data
+X = meas(idx,:);
+Y = species(idx);
+
+%training target
+Y = categorical(Y);
+Y = dummyvar(Y)
+
+%testing data
+X_test = meas(idx_test,:);
+Y_test = species(idx_test);
+
+%testing target
+Y_test = categorical(Y_test);
+Y_test = dummyvar(Y_test)
+
+%Define the hidden layer size for NN using iteration assume 10, 15, and 20 hidden layers
+hiddenLayerSize = [10, 15, 20];
+
+%for each neural network setting repeat the experiment 4 times
+for i = 1:4
+    %for each hidden layer size
+    for j = 1:length(hiddenLayerSize)
+        %create a neural network with 1 hidden layer
+        net = feedforwardnet(hiddenLayerSize(j));
+        
+        %Train the neural network based on the training dataset created
+        net = trainlm(net,X',Y');
+
+        %view the neural network
+        view(net)
+
+        %test the neural network using the testing dataset
+        y_pred = net(X_test');
+
+        %calculate the accuracy of the neural network
+        accuracy = sum(y_pred == Y_test')/length(Y_test);
+
+        %display the accuracy
+        disp(accuracy)
+
+        %average performance of the neural network
+        avg_accuracy = mean(accuracy);
+
+        %display the average performance    
+        disp(avg_accuracy)
+    end
+end
+
+
 
 
 
