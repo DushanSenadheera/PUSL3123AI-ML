@@ -6,6 +6,7 @@ rng(1); % For reproducibility
 randomOrder = randperm(size(meas,1));
 meas = meas(randomOrder,:);
 species = species(randomOrder,:);
+
 trainingSize = floor(0.6 * size(meas,1));
 trainingSet = meas(1:trainingSize,:);
 trainingLabels = species(1:trainingSize,:);
@@ -18,6 +19,8 @@ trainingTarget = trainingLabels';
 testingData = testSet';
 testingTarget = testLabels';
 
+k = [5, 7]; 
+
 %For each K value, report the confusion matrix and percentage of correct classifications
 for i = 1:length(k)
     Mdl = fitcknn(trainingData',trainingTarget','NumNeighbors',k(i));
@@ -25,7 +28,7 @@ for i = 1:length(k)
     confusionMatrix = confusionmat(testingTarget',predictedLabels);
     fprintf('Confusion Matrix for K = %d is\n',k(i));
     disp(confusionMatrix);
-    % accuracy = sum(predictedLabels == testingTarget')/length(testingTarget);
-    % fprintf('Percentage of correct classifications for K = %d is %f\n',k(i),accuracy);
+    accuracy = sum(strcmp(predictedLabels, testingTarget')) / length(testingTarget);
+    fprintf('Percentage of correct classifications for K = %d is %f\n',k(i),accuracy);
 end
 

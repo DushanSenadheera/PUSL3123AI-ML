@@ -4,7 +4,7 @@ load fisheriris.mat
 %total number of rows in the dataset
 n = size(meas,1);
 
-%for each coloumn from 1 to 4
+%for each feature Mean, the Standard Deviation, Maximum, Minimum and Root Mean Square
 for i = 1:4
     %mean of the coloumn
     fprintf('Mean of coloumn %d is %f\n',i,mean(meas(:,i)));
@@ -20,4 +20,6 @@ for i = 1:4
 
     %root mean square of the coloumn
     fprintf('Root mean square of coloumn %d is %f\n',i,rms(meas(:,i)));
+
+    fprintf('=====================================================================\n')
 end

@@ -3,10 +3,14 @@ load('kmeansdata.mat');
 
 k = [3,4,5]
 
+% Create a new figure
+figure;
+
 % implement Kmeans clustering and then repeat the same procedure to evaluate different number of clusters
 for i = 1:length(k)
     [idx, C] = kmeans(X, k(i));
-    figure;
+    % Create a subplot for the clustering
+    subplot(2, length(k), i);
     gscatter(X(:,1),X(:,2),idx);
     hold on;
     plot(C(:,1),C(:,2),'kx','MarkerSize',15,'LineWidth',3);
@@ -23,7 +27,8 @@ disp(eva)
 %For each K value, report the mean performance using the Silhouette measure and plot the Silhouette for each cluster 
 for i = 1:length(k)
     [idx, C] = kmeans(X, k(i));
-    figure;
+    % Create a subplot for the silhouette plot
+    subplot(2, length(k), length(k) + i);
     [silh,h] = silhouette(X,idx);
     h = gca;
     h.Children.EdgeColor = [.8 .8 1];

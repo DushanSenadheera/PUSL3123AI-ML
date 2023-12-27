@@ -29,6 +29,9 @@ Y_test = dummyvar(Y_test)
 %Define the hidden layer size for NN using iteration assume 10, 15, and 20 hidden layers
 hiddenLayerSize = [10, 15, 20];
 
+% Initialize an array to store the accuracy of each run
+accuracies = [];
+
 %for each neural network setting repeat the experiment 4 times
 for i = 1:4
     %for each hidden layer size
@@ -48,16 +51,16 @@ for i = 1:4
         %calculate the accuracy of the neural network
         accuracy = sum(y_pred == Y_test')/length(Y_test);
 
-        %display the accuracy
-        disp(accuracy)
-
-        %average performance of the neural network
-        avg_accuracy = mean(accuracy);
-
-        %display the average performance    
-        disp(avg_accuracy)
+        %store the accuracy in the accuracies array
+        accuracies = [accuracies, accuracy];
     end
 end
+
+%calculate the average accuracy
+average_accuracy = mean(accuracies);
+
+%display the average accuracy
+disp(average_accuracy)
 
 
 
