@@ -1,15 +1,17 @@
 %load the MATLAB file named kmeansdata.mat
 load('kmeansdata.mat');
 
+%assign number of clusters
 k = [3,4,5]
 
 % Create a new figure
 figure;
 
-% implement Kmeans clustering and then repeat the same procedure to evaluate different number of clusters
+% implement Kmeans clustering to evaluate different number of clusters
 for i = 1:length(k)
     [idx, C] = kmeans(X, k(i));
-    % Create a subplot for the clustering
+
+    % Create a subplots for the clustering
     subplot(2, length(k), i);
     gscatter(X(:,1),X(:,2),idx);
     hold on;
@@ -18,16 +20,8 @@ for i = 1:length(k)
     xlabel('x1');
     ylabel('x2');
     hold off;
-end
 
-%find out the optimal number of classes that achieve the best performance
-eva = evalclusters(X,'kmeans','CalinskiHarabasz','KList',[1:6]);
-disp(eva)
-
-%For each K value, report the mean performance using the Silhouette measure and plot the Silhouette for each cluster 
-for i = 1:length(k)
-    [idx, C] = kmeans(X, k(i));
-    % Create a subplot for the silhouette plot
+    % Create a subplots for the silhouette plot
     subplot(2, length(k), length(k) + i);
     [silh,h] = silhouette(X,idx);
     h = gca;
@@ -36,8 +30,17 @@ for i = 1:length(k)
     ylabel 'Cluster';
     title(['Silhouette Plot with k = ', num2str(k(i))]);
     hold off;
+
+    % Calculate the mean performance using silhouette Value
+    meanSilhouette = mean(silh);
+    
+    % Display the mean silhouette value
+    fprintf('Mean Silhouette Value for K = %d is %f\n',k(i),meanSilhouette);
 end
 
+%find out the optimal number of clusters that achieve the best performance
+eva = evalclusters(X,'kmeans','CalinskiHarabasz','KList',[3:5]);
+disp(eva)
 
 
 

@@ -2,7 +2,8 @@
 load fisheriris.mat
 
 %total number of rows in the dataset
-n = size(meas,1);
+N = size(meas,1);
+fprintf('total number of rows in the dataset is %d\n',N);
 
 %for each feature Mean, the Standard Deviation, Maximum, Minimum and Root Mean Square
 for i = 1:4

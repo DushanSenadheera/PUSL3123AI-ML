@@ -33,34 +33,35 @@ hiddenLayerSize = [10, 15, 20];
 accuracies = [];
 
 %for each neural network setting repeat the experiment 4 times
-for i = 1:4
+for i = 1:length(hiddenLayerSize)
     %for each hidden layer size
-    for j = 1:length(hiddenLayerSize)
+    for j = 1:4
         %create a neural network with 1 hidden layer
-        net = feedforwardnet(hiddenLayerSize(j));
+        net = feedforwardnet(hiddenLayerSize(i));
         
         %Train the neural network based on the training dataset created
         net = trainlm(net,X',Y');
 
-        %view the neural network
-        view(net)
-
         %test the neural network using the testing dataset
         y_pred = net(X_test');
 
-        %calculate the accuracy of the neural network
-        accuracy = sum(y_pred == Y_test')/length(Y_test);
+        %calculate the accuracy of the neural network by converting vector values to indices
+        accuracy = sum(vec2ind(y_pred) == vec2ind(Y_test'))/length(Y_test);
+        fprintf("accuracy for %d hidden layer = %f in the %d itteration\n",hiddenLayerSize(i), accuracy, j)
 
         %store the accuracy in the accuracies array
         accuracies = [accuracies, accuracy];
     end
+    
+    %view the neural network for each hidden layer
+    view(net)
 end
 
 %calculate the average accuracy
 average_accuracy = mean(accuracies);
 
 %display the average accuracy
-disp(average_accuracy)
+fprintf("average accuracy = %f",average_accuracy)
 
 
 
